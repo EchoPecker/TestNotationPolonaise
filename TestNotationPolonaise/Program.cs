@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace TestNotationPolonaise
 {
@@ -37,7 +38,57 @@ namespace TestNotationPolonaise
                 Console.WriteLine("entrez une formule polonaise en séparant chaque partie par un espace = ");
                 string laFormule = Console.ReadLine();
                 // affichage du résultat
-                Console.WriteLine("Résultat =  " + Polonaise(laFormule));
+                String formule = laFormule;
+                string[] tab = formule.Split();
+
+                int nbCase = tab.Length;
+                int placeTab = tab.Length - 1;
+
+                while (nbCase > 1)
+                {
+                    while (placeTab > 0 && tab[placeTab] != "+" && tab[placeTab] != "-" && tab[placeTab] != "/" && tab[placeTab] != "*")
+                    {
+                        placeTab--;
+                    }
+
+                    // récupération des deux valeurs :
+
+                    float a = float.Parse(tab[placeTab + 1]);
+                    float b = float.Parse(tab[placeTab + 2]);
+
+                    float result = 0;
+                    switch(tab[placeTab])
+                    {
+                        case ("+"):
+                            result = a +b;
+                            break;
+                        case ("-"):
+                            result = a - b;
+                            break;
+                        case ("*"):
+                            result = a * b;
+                            break;
+                        case ("/"):
+                            result = a / b;
+                            break;
+
+                    };
+
+                    // on place le résulat dans le tableau à la place du signe utilisé
+                    tab[placeTab] = result.ToString();
+
+                    for (int j = placeTab + 1; j < nbCase - 2; j++)
+                    {
+                        tab[j] = tab[j + 2];
+                    }
+ 
+                    nbCase = nbCase - 2;                
+                }
+
+                Console.WriteLine(tab[0]);
+
+
+                //Console.WriteLine("Résultat =  " + Polonaise(laFormule));
                 reponse = saisie("Voulez-vous continuer ?", 'O', 'N');
             } while (reponse == 'O');
         }
